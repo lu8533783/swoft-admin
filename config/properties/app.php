@@ -27,4 +27,7 @@ return [
     'service'      => require __DIR__ . DS . 'service.php',
     'breaker'      => require __DIR__ . DS . 'breaker.php',
     'provider'     => require __DIR__ . DS . 'provider.php',
+
+    // 用户加密盐
+    'pass_salt' => 'test',
 ];
