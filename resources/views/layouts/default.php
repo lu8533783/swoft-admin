@@ -1,25 +1,30 @@
-<?php
-/**
- * @var \Swoft\View\Base\View $this
- */
-?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Demo for layout</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-</head>
-<body>
-    <?php $this->include('layouts/default/header') ?>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Demo for layout</title>
+        <link href="/css/bootstrap.css" rel="stylesheet">
+        <link href="/css/site.css" rel="stylesheet">
+        <link href="/css/font-awesome.css" rel="stylesheet">
+        <link href="/css/AdminLTE.css" rel="stylesheet">
+        <link href="/css/skins/_all-skins.css" rel="stylesheet">
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
 
-    <div class="container">
-        <!-- Content here -->
-        <div id="page-content" style="padding: 15px 0;">{_CONTENT_}</div>
-        <?php $this->include('layouts/default/footer') ?>
+        <?php $this->include('layouts/default/header') ?>
+
+        <?php $this->include('layouts/default/left', ['menu' => $menu]) ?>
+
+        <?php $this->include('layouts/default/content') ?>
+
     </div>
-</body>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.pjax.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/adminlte.js"></script>
+    </body>
 </html>

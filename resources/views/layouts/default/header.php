@@ -1,29 +1,43 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Swoft</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<style>
+    .user-menu .dropdown-menu{
+        min-width: 100px;
+        width: 136px !important;
+    }
+</style>
 
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/demo2/view">No layout</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <span class="navbar-text">
-        This is header
-      </span>
-<!--      <form class="form-inline my-2 my-lg-0">-->
-<!--        <input class="form-control mr-sm-2" type="search" placeholder="Search">-->
-<!--        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-<!--      </form>-->
-    </div>
-  </nav>
+<header class="main-header">
+
+    <a class="logo" href="/"><span class="logo-mini">APP</span><span class="logo-lg">费用管理系统</span></a>
+
+    <nav class="navbar navbar-static-top" role="navigation">
+
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+
+        <div class="navbar-custom-menu">
+
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
+                        <span class="hidden-xs">超级管理员</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-footer">
+                            <div class="pull-right">
+                                <a class="btn btn-default btn-flat" href="/site/logout" data-method="post">Sign out</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- User Account: style can be found in dropdown.less -->
+                <li>
+                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </header>
