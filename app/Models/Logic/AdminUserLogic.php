@@ -48,6 +48,7 @@ class AdminUserLogic
         //更新登陆信息
         $this->adminUserDao->updateLoginInfo($adminUser->getId());
 
-        return Message::success(Message::SUCCESS);
+        session()->put('userInfo', $adminUser);
+        return Message::success(Message::SUCCESS, session()->getId());
     }
 }
