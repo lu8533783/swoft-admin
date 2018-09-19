@@ -1,15 +1,16 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: shcw
+ * User: lu xiao (8533783@qq.com)
  * Date: 2018/9/14
  * Time: 11:50
  */
 
 namespace App\Models\Logic;
 
-use App\Models\Data\AdminUserData;
+use App\Models\Dao\AdminUserDao;
 use App\Utils\Message;
+use App\Validate\AdminUserValidate;
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Bean\Annotation\Inject;
 
@@ -22,26 +23,32 @@ class AdminUserLogic
 {
     /**
      * @Inject()
-     * @var AdminUserData
+     * @var AdminUserDao
      */
-    private $adminUserData;
+    private $adminUserDao;
 
     /**
-     * @param $username
-     * @param $password
-     * @return string|array
+     * @param array $data
+     * @return array
      */
-    public function login($username, $password)
+    public function login(array $data)
     {
-        $adminUser = $this->adminUserData->getUserByName($username);
+        $res = AdminUserValidate::check($data);
+        if ($res->fail())
+            return Message::error(Message::E_PARAM, $res->firstError());
 
-        if (empty($adminUser) || $adminUser->getPassword() != md5($password . config('pass_salt'))) {
-            return Message::error([500, '帐号密码错误']);
-        }
-        if ($adminUser->getStatus() != 1) {
-            return Message::error([500, '帐号已禁用']);
-        }
+        $adminUser = $this->adminUserDao->getUserByName($data['username']);
+        if (empty($adminUser))
+            return Message::error(Message::E_USER_NOT_EXIST);
+        if ($adminUser->getStatus() != 1)
+            return Message::error(Message::E_USER_DENY);
+        if ($adminUser->getPassword() != md5($data['password'] . config('pass_salt')))
+            return Message::error(Message::E_PWD);
+
+        //更新登陆信息
+        $this->adminUserDao->updateLoginInfo($adminUser->getId());
+
         session()->put('userInfo', $adminUser);
-        return session()->getId();
+        return Message::success(Message::SUCCESS, session()->getId());
     }
 }
