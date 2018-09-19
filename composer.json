@@ -33,7 +33,8 @@
         "swoft/service-governance": "^1.0",
         "inhere/php-validate": "^2.5",
         "flc/dysms": "^1.0",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "owasp/phprbac": "^2.0"
     },
     "require-dev": {
         "swoft/swoole-ide-helper": "dev-master",

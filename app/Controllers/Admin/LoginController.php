@@ -8,7 +8,9 @@
 
 namespace App\Controllers\Admin;
 
+use App\Middlewares\ApiMiddleware;
 use App\Models\Logic\AdminUserLogic;
+use Swoft\Http\Message\Bean\Annotation\Middleware;
 use Swoft\Http\Message\Server\Request;
 use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
@@ -22,7 +24,6 @@ use Swoft\Bean\Annotation\Inject;
  */
 Class LoginController
 {
-
     /**
      * @Inject()
      * @var AdminUserLogic
@@ -31,15 +32,15 @@ Class LoginController
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
-     * @param Request $request
+     * @Middleware(class=ApiMiddleware::class)
+     *
      * @return string
      */
-    public function login(Request $request)
+    public function login()
     {
-        $username = $request->post('username');
-        $password = $request->post('password');
+        $username = request()->post('username');
+        $password = request()->post('password');
 
-        $res = $this->adminUserLogic->login($username, $password);
-        return $res;
+        return $this->adminUserLogic->login($username, $password);
     }
 }
