@@ -9,6 +9,8 @@
 namespace App\Models\Logic;
 
 use App\Models\Entity\Menu;
+use App\Utils\Message;
+use App\Validate\MenuValidate;
 use Swoft\Bean\Annotation\Bean;
 
 /**
@@ -18,31 +20,69 @@ use Swoft\Bean\Annotation\Bean;
  */
 class MenuLogic
 {
-    private $encodeLabels = true;
-    private $hideEmptyItems = true;
-    private $activateItems = true;
-    private $activateParents = true;
-
-    private $itemOptions = [];
-    public $labelTemplate = '<span>{label}</span>';
-    public $linkTemplate = '<a href="{url}">{icon} {label}</a>';
-    public $defaultIconHtml = '<i class="fa fa-circle-o"></i> ';
-    public static $iconClassPrefix = 'fa fa-';
-    public $activeCssClass = 'active';
-    public $firstItemCssClass;
-    public $lastItemCssClass;
-    public $submenuTemplate = "\n<ul class='treeview-menu' {show}>\n{items}\n</ul>\n";
-
     /**
-     * @return string
+     * @return array
      */
     public function getMenu()
     {
         $menus = $this->getMenuToArray();
         $assigned = array_keys($menus);
-        $menus = $this->normalizeMenu($assigned, $menus, null, null);
+        return $this->normalizeMenu($assigned, $menus, null, null);
+    }
 
-        return "<ul class='sidebar-menu tree' data-widget='tree'>{$this->renderItems($menus)}</ul>";
+    /**
+     * @param $data
+     * @return array
+     */
+    public function addMenu($data)
+    {
+        $res = MenuValidate::quick($data)->validate();
+        if ($res->fail())
+            return Message::error(Message::E_PARAM, $res->firstError());
+
+        $menu = new Menu();
+        $menu->setName($data['name']);
+        $menu->setParent($data['parent']);
+        $menu->setRoute($data['route']);
+        $menu->setOrder($data['order']);
+
+        if ($menu->save()->getResult())
+            return Message::success(Message::SUCCESS);
+        else
+            return Message::error(Message::E_INSERT_DATA);
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return array
+     */
+    public function updateMenu($id, $data)
+    {
+        $res = MenuValidate::quick($data)->validate();
+        if ($res->fail())
+            return Message::error(Message::E_PARAM, $res->firstError());
+
+        $result = Menu::updateOne($data, ['id' => $id])->getResult();
+
+        if ($result !== false)
+            return Message::success(Message::SUCCESS);
+        else
+            return Message::error(Message::E_INSERT_DATA);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function delMenu($id)
+    {
+        $result = Menu::deleteById($id)->getResult();;
+
+        if ($result !== false)
+            return Message::success(Message::SUCCESS);
+        else
+            return Message::error(Message::E_INSERT_DATA);
     }
 
     /**
@@ -52,7 +92,7 @@ class MenuLogic
     {
         $result = [];
         /* @var Menu $menu */
-        foreach (Menu::findAll()->getResult() as $menu){
+        foreach (Menu::findAll()->getResult() as $menu) {
             $result[$menu->getId()] = $menu->toArray();
         }
         return $result;
@@ -77,11 +117,12 @@ class MenuLogic
                     $item = call_user_func($callback, $menu);
                 } else {
                     $item = [
-                        'label' => $menu['name'],
-                        'url' => $menu['route'],
+                        'title' => $menu['name'],
+                        'jump'  => $menu['route'],
+                        'name'  => $menu['route'],
                     ];
                     if ($menu['children'] != []) {
-                        $item['items'] = $menu['children'];
+                        $item['list'] = $menu['children'];
                     }
                 }
                 $result[] = $item;
@@ -93,104 +134,5 @@ class MenuLogic
         }
 
         return $result;
-    }
-
-    protected function renderItems($items)
-    {
-        $n = count($items);
-        $lines = [];
-        foreach ($items as $i => $item) {
-            $options = array_merge($this->itemOptions, $item['options'] ?? []);
-            $class = [];
-            if ($item['active']) {
-                $class[] = $this->activeCssClass;
-            }
-            if ($i === 0 && $this->firstItemCssClass !== null) {
-                $class[] = $this->firstItemCssClass;
-            }
-            if ($i === $n - 1 && $this->lastItemCssClass !== null) {
-                $class[] = $this->lastItemCssClass;
-            }
-            if (!empty($class)) {
-                if (empty($options['class'])) {
-                    $options['class'] = implode(' ', $class);
-                } else {
-                    $options['class'] .= ' ' . implode(' ', $class);
-                }
-            }
-            $menu = $this->renderItem($item);
-            if (!empty($item['items'])) {
-                $menu .= strtr($this->submenuTemplate, [
-                    '{show}' => $item['active'] ? "style='display: block'" : '',
-                    '{items}' => $this->renderItems($item['items']),
-                ]);
-                if (isset($options['class'])) {
-                    $options['class'] .= ' treeview';
-                } else {
-                    $options['class'] = 'treeview';
-                }
-            }
-            $lines[] = "<li class='{$options['class']}'>$menu</li>";
-        }
-        return implode("\n", $lines);
-    }
-
-    protected function renderItem($item)
-    {
-        if (isset($item['items'])) {
-            $labelTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
-            $linkTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
-        } else {
-            $labelTemplate = $this->labelTemplate;
-            $linkTemplate = $this->linkTemplate;
-        }
-
-        $replacements = [
-            '{label}' => strtr($this->labelTemplate, ['{label}' => $item['label'],]),
-            '{icon}' => empty($item['icon']) ? $this->defaultIconHtml
-                : '<i class="' . self::$iconClassPrefix . $item['icon'] . '"></i> ',
-            '{url}' => isset($item['url']) ? $item['url'] : 'javascript:void(0);',
-        ];
-
-        $template = $item['template'] ?? isset($item['url']) ? $linkTemplate : $labelTemplate;
-
-        return strtr($template, $replacements);
-    }
-
-    protected function normalizeItems($items, & $active)
-    {
-        foreach ($items as $i => $item) {
-            if (isset($item['visible']) && !$item['visible']) {
-                unset($items[$i]);
-                continue;
-            }
-            if (!isset($item['label'])) {
-                $item['label'] = '';
-            }
-            $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
-            $items[$i]['label'] = $encodeLabel ? htmlspecialchars($item['label']) : $item['label'];
-            $items[$i]['icon'] = isset($item['icon']) ? $item['icon'] : '';
-            $hasActiveChild = false;
-            if (isset($item['items'])) {
-                $items[$i]['items'] = $this->normalizeItems($item['items'], $hasActiveChild);
-                if (empty($items[$i]['items']) && $this->hideEmptyItems) {
-                    unset($items[$i]['items']);
-                    if (!isset($item['url'])) {
-                        unset($items[$i]);
-                        continue;
-                    }
-                }
-            }
-            if (!isset($item['active'])) {
-                if ($this->activateParents && $hasActiveChild || $this->activateItems /*&& $this->isItemActive($item)*/) {
-                    $active = $items[$i]['active'] = true;
-                } else {
-                    $items[$i]['active'] = false;
-                }
-            } elseif ($item['active']) {
-                $active = true;
-            }
-        }
-        return array_values($items);
     }
 }
