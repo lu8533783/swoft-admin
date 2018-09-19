@@ -28,7 +28,7 @@ class ApiMiddleware implements MiddlewareInterface
         /* @var Response $response*/
         $response = $handler->handle($request);
         $result = $response->getAttribute(AttributeEnum::RESPONSE_ATTRIBUTE);
-        if (is_array($result) && !isset($result['code'])){
+        if (!isset($result['code'])){
             $result = [
                 'code' => 0,
                 'msg' => '',

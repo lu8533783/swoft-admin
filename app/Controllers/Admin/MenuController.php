@@ -46,13 +46,7 @@ class MenuController
      */
     public function addMenu(Request $request)
     {
-        $data = [
-            'name'   => $request->input('name'),
-            'parent' => $request->input('parent'),
-            'route'  => $request->input('route'),
-            'order'  => $request->input('order'),
-        ];
-        return $this->menuLogic->addMenu($data);
+        return $this->menuLogic->addMenu($request->getParsedBody());
     }
 
     /**

@@ -9,6 +9,7 @@
 namespace App\Models\Logic;
 
 use App\Models\Data\AdminUserData;
+use App\Utils\Message;
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Bean\Annotation\Inject;
 
@@ -19,26 +20,28 @@ use Swoft\Bean\Annotation\Inject;
  */
 class AdminUserLogic
 {
-
     /**
      * @Inject()
      * @var AdminUserData
      */
     private $adminUserData;
 
+    /**
+     * @param $username
+     * @param $password
+     * @return string|array
+     */
     public function login($username, $password)
     {
         $adminUser = $this->adminUserData->getUserByName($username);
 
-        if (empty($adminUser)) {
-            return '帐号不存在';
+        if (empty($adminUser) || $adminUser->getPassword() != md5($password . config('pass_salt'))) {
+            return Message::error([500, '帐号密码错误']);
         }
         if ($adminUser->getStatus() != 1) {
-            return '帐号已禁用';
+            return Message::error([500, '帐号已禁用']);
         }
-        if ($adminUser->getPassword() != md5($password . config('pass_salt'))) {
-            return '帐号密码错误';
-        }
-        return $adminUser;
+        session()->put('userInfo', $adminUser);
+        return session()->getId();
     }
 }
