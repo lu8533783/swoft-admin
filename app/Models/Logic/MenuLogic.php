@@ -34,15 +34,14 @@ class MenuLogic
     public $submenuTemplate = "\n<ul class='treeview-menu' {show}>\n{items}\n</ul>\n";
 
     /**
-     * @return string
+     * @return array
      */
     public function getMenu()
     {
         $menus = $this->getMenuToArray();
         $assigned = array_keys($menus);
-        $menus = $this->normalizeMenu($assigned, $menus, null, null);
-
-        return "<ul class='sidebar-menu tree' data-widget='tree'>{$this->renderItems($menus)}</ul>";
+        return $this->normalizeMenu($assigned, $menus, null, null);
+//        return "<ul class='sidebar-menu tree' data-widget='tree'>{$this->renderItems($menus)}</ul>";
     }
 
     /**
@@ -77,11 +76,12 @@ class MenuLogic
                     $item = call_user_func($callback, $menu);
                 } else {
                     $item = [
-                        'label' => $menu['name'],
-                        'url' => $menu['route'],
+                        'title' => $menu['name'],
+                        'jump' => $menu['route'],
+                        'name' => $menu['route'],
                     ];
                     if ($menu['children'] != []) {
-                        $item['items'] = $menu['children'];
+                        $item['list'] = $menu['children'];
                     }
                 }
                 $result[] = $item;
