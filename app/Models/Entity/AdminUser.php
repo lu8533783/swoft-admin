@@ -33,7 +33,7 @@ class AdminUser extends Model
 
     /**
      * @var string $password 密码
-     * @Column(name="password", type="string", length=32, default="")
+     * @Column(name="password", type="char", length=32, default="")
      */
     private $password;
 
@@ -51,7 +51,7 @@ class AdminUser extends Model
 
     /**
      * @var string $mobile 手机号码
-     * @Column(name="mobile", type="string", length=255, default="")
+     * @Column(name="mobile", type="char", length=11, default="")
      */
     private $mobile;
 
@@ -78,12 +78,6 @@ class AdminUser extends Model
      * @Column(name="create_time", type="integer", default=0)
      */
     private $createTime;
-
-    /**
-     * @var int $updateTime 更新时间
-     * @Column(name="update_time", type="integer", default=0)
-     */
-    private $updateTime;
 
     /**
      * @var int $status 0：封禁 1: 正常
@@ -212,18 +206,6 @@ class AdminUser extends Model
     }
 
     /**
-     * 更新时间
-     * @param int $value
-     * @return $this
-     */
-    public function setUpdateTime(int $value): self
-    {
-        $this->updateTime = $value;
-
-        return $this;
-    }
-
-    /**
      * 0：封禁 1: 正常
      * @param int $value
      * @return $this
@@ -323,15 +305,6 @@ class AdminUser extends Model
     public function getCreateTime()
     {
         return $this->createTime;
-    }
-
-    /**
-     * 更新时间
-     * @return int
-     */
-    public function getUpdateTime()
-    {
-        return $this->updateTime;
     }
 
     /**

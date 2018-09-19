@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: shcw
+ * User: lu xiao (8533783@qq.com)
  * Date: 2018/9/14
  * Time: 13:59
  */
@@ -26,5 +26,21 @@ class AdminUserDao
     public function getUserByName($username)
     {
         return AdminUser::findOne(['username' => $username])->getResult();
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function updateLoginInfo(int $userId)
+    {
+        $time = time();
+        $ip = request()->getHeaderLine('X-Real-IP');
+
+        $data = [
+            'login_ip'   => ip2long($ip),
+            'login_time' => $time
+        ];
+        return AdminUser::updateOne($data, ['id' => $userId])->getResult();
     }
 }

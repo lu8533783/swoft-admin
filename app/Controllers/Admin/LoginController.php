@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: shcw
+ * User: lu xiao (8533783@qq.com)
  * Date: 2018/9/14
  * Time: 11:47
  */
@@ -32,14 +32,16 @@ Class LoginController
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
      * @param Request $request
-     * @return string
+     * @return array
      */
     public function login(Request $request)
     {
-        $username = $request->post('username');
-        $password = $request->post('password');
+        $data = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+        ];
 
-        $res = $this->adminUserLogic->login($username, $password);
+        $res = $this->adminUserLogic->login($data);
         return $res;
     }
 }
