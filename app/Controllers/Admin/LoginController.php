@@ -1,14 +1,16 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: lu xiao (8533783@qq.com)
+ * User: shcw
  * Date: 2018/9/14
  * Time: 11:47
  */
 
 namespace App\Controllers\Admin;
 
+use App\Middlewares\ApiMiddleware;
 use App\Models\Logic\AdminUserLogic;
+use Swoft\Http\Message\Bean\Annotation\Middleware;
 use Swoft\Http\Message\Server\Request;
 use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
@@ -22,7 +24,6 @@ use Swoft\Bean\Annotation\Inject;
  */
 Class LoginController
 {
-
     /**
      * @Inject()
      * @var AdminUserLogic
@@ -31,17 +32,15 @@ Class LoginController
 
     /**
      * @RequestMapping(route="login",method={RequestMethod::POST})
-     * @param Request $request
-     * @return array
+     * @Middleware(class=ApiMiddleware::class)
+     *
+     * @return string
      */
-    public function login(Request $request)
+    public function login()
     {
-        $data = [
-            'username' => $request->input('username'),
-            'password' => $request->input('password'),
-        ];
+        $username = request()->post('username');
+        $password = request()->post('password');
 
-        $res = $this->adminUserLogic->login($data);
-        return $res;
+        return $this->adminUserLogic->login($username, $password);
     }
 }
