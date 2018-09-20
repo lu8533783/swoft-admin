@@ -11,9 +11,10 @@ use Swoft\Db\Types;
 
 /**
  * 管理员表
-
  * @Entity()
  * @Table(name="sh_admin_user")
+ *
+ * @property Roles role
  * @uses      AdminUser
  */
 class AdminUser extends Model

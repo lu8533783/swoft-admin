@@ -35,6 +35,7 @@
         "flc/dysms": "^1.0",
         "firebase/php-jwt": "^5.0",
         "owasp/phprbac": "^2.0"
+>>>>>>> cc382f99c01945bbc3d100784dbd2a07451b4bc7
     },
     "require-dev": {
         "swoft/swoole-ide-helper": "dev-master",
