@@ -34,7 +34,7 @@ Class LoginController
      * @RequestMapping(route="login",method={RequestMethod::POST})
      * @Middleware(class=ApiMiddleware::class)
      *
-     * @return string
+     * @return array
      */
     public function login()
     {

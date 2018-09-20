@@ -21,7 +21,7 @@ return [
         'maxIdleTime' => 60,
         'timeout'     => 8,
         'db'          => 1,
-        'prefix'      => 'redis_',
+        'prefix'      => '',
         'serialize'   => 0,
     ],
     'demoRedis' => [

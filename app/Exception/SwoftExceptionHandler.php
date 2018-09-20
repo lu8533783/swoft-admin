@@ -48,7 +48,7 @@ class SwoftExceptionHandler
         $code      = $throwable->getCode();
         $exception = $throwable->getMessage();
 
-        $data = ['msg' => $exception, 'file' => $file, 'line' => $line, 'code' => $code];
+        $data = ['msg' => $exception, 'file' => '', 'line' => $line, 'code' => $code];
         App::error(json_encode($data));
         return $response->json($data);
     }

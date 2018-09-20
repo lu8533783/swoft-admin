@@ -51,4 +51,11 @@ class AdminUserLogic
         session()->put('userInfo', $adminUser);
         return Message::success(Message::SUCCESS, session()->getId());
     }
+
+    public function getUserByWhere(array $data)
+    {
+        $result = $this->adminUserDao->getUserByWhere($data);
+
+        return Message::success(Message::SUCCESS, $result);
+    }
 }

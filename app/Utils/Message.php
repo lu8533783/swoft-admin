@@ -10,7 +10,7 @@ namespace App\Utils;
 
 class Message
 {
-    const SUCCESS = [1000, ''];
+    const SUCCESS = [0, ''];
     const E_DEFAULT = [1001, '未知错误'];
     const E_PARAM = [1012, '参数错误'];
 
@@ -36,11 +36,15 @@ class Message
      * 成功返回
      * @param array $code
      * @param array $data 返回数据
+     * @param string $count 数量
      * @param string $msg 成功消息
      * @return array
      */
-    public static function success($code = self::SUCCESS, $data = [], $msg = '')
+    public static function success($code = self::SUCCESS, $data = [], $count = '', $msg = '')
     {
+        if (!empty($count)) {
+            return ['code' => $code['0'], 'data' => $data, 'count' => $count, 'msg' => $msg];
+        }
         return ['code' => $code['0'], 'data' => $data, 'msg' => $msg];
     }
 

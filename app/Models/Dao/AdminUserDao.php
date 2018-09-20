@@ -43,4 +43,20 @@ class AdminUserDao
         ];
         return AdminUser::updateOne($data, ['id' => $userId])->getResult();
     }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    public function getUserByWhere(array $where)
+    {
+        /* @var AdminUser $users */
+        $users = AdminUser::findAll($where)->getResult();
+        foreach ($users as $k => $user) {
+            $user = $user->toArray();
+            unset($user['password']);
+            $users[$k] = $user;
+        }
+        return $users;
+    }
 }
