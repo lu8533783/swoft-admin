@@ -30,4 +30,12 @@ return [
 
     // 用户加密盐
     'pass_salt' => 'test',
+
+    // 阿里云OSS配置
+    'oss' => [
+        'id' => 'w3w9a0cEvVRuviMl',
+        'secret' => '4UPwA6AuKOGKOj8mMeNX4tPsiOwWjI',
+        'bucket' => 'xinzhongyi',
+        'endpoint' => 'oss-cn-hangzhou.aliyuncs.com',
+    ]
 ];

@@ -34,8 +34,9 @@
         "inhere/php-validate": "^2.5",
         "flc/dysms": "^1.0",
         "firebase/php-jwt": "^5.0",
-        "owasp/phprbac": "^2.0"
->>>>>>> cc382f99c01945bbc3d100784dbd2a07451b4bc7
+        "zendframework/zend-permissions-rbac": "^3.0",
+        "owasp/phprbac": "^2.0",
+        "aliyuncs/oss-sdk-php": "~2.0"
     },
     "require-dev": {
         "swoft/swoole-ide-helper": "dev-master",
