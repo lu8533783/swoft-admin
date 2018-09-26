@@ -10,7 +10,7 @@
 return [
     'serverDispatcher' => [
         'middlewares' => [
-            \Swoft\View\Middleware\ViewMiddleware::class,
+            // \Swoft\View\Middleware\ViewMiddleware::class,
             // \Swoft\Devtool\Middleware\DevToolMiddleware::class,
             \Swoft\Session\Middleware\SessionMiddleware::class,
         ]
@@ -20,7 +20,7 @@ return [
         'class' => \Swoft\Session\SessionManager::class,
         'config' => [
             'driver' => 'redis',
-            'name' => 'SWOFT_SESSION_ID',
+            'name' => 'sh_session_id',
             'lifetime' => 1800,
             'expire_on_close' => false,
             'encrypt' => false,

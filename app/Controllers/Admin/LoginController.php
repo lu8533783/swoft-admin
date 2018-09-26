@@ -34,13 +34,16 @@ Class LoginController
      * @RequestMapping(route="login",method={RequestMethod::POST})
      * @Middleware(class=ApiMiddleware::class)
      *
+     * @param Request $request
      * @return array
      */
-    public function login()
+    public function login(Request $request)
     {
-        $username = request()->post('username');
-        $password = request()->post('password');
+        $data = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+        ];
 
-        return $this->adminUserLogic->login($username, $password);
+        return $this->adminUserLogic->login($data);
     }
 }

@@ -11,6 +11,7 @@ namespace App\Utils;
 class Message
 {
     const SUCCESS = [0, ''];
+    const E_NO_LOGIN = [1000, '未登陆'];
     const E_DEFAULT = [1001, '未知错误'];
     const E_PARAM = [1012, '参数错误'];
 
